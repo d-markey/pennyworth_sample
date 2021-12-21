@@ -1,0 +1,173 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'v1_user_api.dart';
+
+// **************************************************************************
+// RestEntityGenerator
+// **************************************************************************
+
+// REST Entity: UserLoginDto
+
+extension UserLoginDtoRegistrationExt on OpenApiService {
+  void registerUserLoginDto() {
+    registerTypeSpecification<UserLoginDto>(TypeSpecification.object(
+            title: 'User login')
+        .addProperty(PropertySpecification.string('userId', required: true))
+        .addProperty(PropertySpecification.string('password', required: true)));
+    registerTypeSpecification<List<UserLoginDto>>(TypeSpecification.array(
+        items: TypeSpecification.object(type: UserLoginDto),
+        title: 'User login (array)'));
+  }
+}
+
+extension UserLoginDtoSerializationExt on UserLoginDto {
+  Map autoSerialize() {
+    final map = <String, dynamic>{};
+    map['userId'] = userId;
+    map['password'] = password;
+    return map;
+  }
+}
+
+extension UserLoginDtoDeserializationExt on Map {
+  UserLoginDto autoDeserializeUserLoginDto() {
+    return UserLoginDto(userId: this['userId'], password: this['password']);
+  }
+}
+
+extension UserLoginDtoRequestExt on HttpRequest {
+  Future<UserLoginDto> getUserLoginDto() async {
+    final body = await bodyAsJsonMap;
+    return body.autoDeserializeUserLoginDto();
+  }
+
+  Future<List<UserLoginDto>> getListOfUserLoginDto() async {
+    final body = await bodyAsJsonList;
+    return body
+        .map((item) => (item as Map).autoDeserializeUserLoginDto())
+        .toList();
+  }
+}
+
+// REST Entity: UserInfoDto
+
+extension UserInfoDtoRegistrationExt on OpenApiService {
+  void registerUserInfoDto() {
+    registerTypeSpecification<UserInfoDto>(
+        TypeSpecification.object(title: 'User info')
+            .addProperty(PropertySpecification.string('userId', required: true))
+            .addProperty(PropertySpecification.string('name', nullable: true))
+            .addProperty(PropertySpecification.array('roles',
+                items: TypeSpecification.string(), nullable: true))
+            .addProperty(PropertySpecification.object('error',
+                type: RestError, nullable: true)));
+    registerTypeSpecification<List<UserInfoDto>>(TypeSpecification.array(
+        items: TypeSpecification.object(type: UserInfoDto),
+        title: 'User info (array)'));
+  }
+}
+
+extension UserInfoDtoSerializationExt on UserInfoDto {
+  Map autoSerialize() {
+    final map = <String, dynamic>{};
+    map['userId'] = userId;
+    map['name'] = name;
+    map['roles'] = roles;
+    map['error'] = error?.toJson();
+    return map;
+  }
+}
+
+extension UserInfoDtoDeserializationExt on Map {
+  UserInfoDto autoDeserializeUserInfoDto() {
+    return UserInfoDto(this['userId'], this['name'], this['roles']);
+  }
+}
+
+extension UserInfoDtoRequestExt on HttpRequest {
+  Future<UserInfoDto> getUserInfoDto() async {
+    final body = await bodyAsJsonMap;
+    return body.autoDeserializeUserInfoDto();
+  }
+
+  Future<List<UserInfoDto>> getListOfUserInfoDto() async {
+    final body = await bodyAsJsonList;
+    return body
+        .map((item) => (item as Map).autoDeserializeUserInfoDto())
+        .toList();
+  }
+}
+
+// **************************************************************************
+// RestServiceGenerator
+// **************************************************************************
+
+// REST Service User_v1
+
+// ignore: camel_case_extensions
+extension User_v1_MounterExt on NestedRoute {
+  static Future _process(HttpRequest req, HttpResponse res,
+      FutureOr Function(HttpRequest req, HttpResponse res) body) async {
+    try {
+      var ret = body(req, res);
+      if (ret is Future) {
+        ret = await ret;
+      }
+      return ret;
+    } on AlfredException {
+      rethrow;
+    } catch (ex) {
+      throw AlfredException(
+          HttpStatus.internalServerError, 'Internal Server Error');
+    }
+  }
+
+  // ignore: non_constant_identifier_names
+  List<OpenApiRoute> mount_User_v1(User_v1 api, OpenApiService openApiService) {
+    // ensure types used by these operations are registered
+    openApiService.registerUserLoginDto();
+    openApiService.registerUserInfoDto();
+
+    // mount operations on the service's base URI
+    final mountPoint = route('/user', middleware: const <AlfredMiddleware>[]);
+    final tags = ['USER'];
+    return <OpenApiRoute>[
+      OpenApiRoute(
+          mountPoint.post(
+            'login',
+            (req, res) => _process(req, res, (req, res) async {
+              final input = await req.getUserLoginDto();
+              return await api.login(req, res, input);
+            }),
+          ),
+          summary: 'Authenticate user',
+          operationId: 'User_v1.login',
+          input: UserLoginDto,
+          tags: tags.followedBy(['AUTH'])),
+      OpenApiRoute(
+          mountPoint.get(
+            'logout',
+            (req, res) => _process(req, res, (req, res) {
+              api.logout(req, res);
+            }),
+          ),
+          summary: 'Log user out',
+          operationId: 'User_v1.logout',
+          tags: tags.followedBy(['AUTH'])),
+      OpenApiRoute(
+          mountPoint.get(
+              '/:userid:alpha',
+              (req, res) => _process(req, res, (req, res) async {
+                    final userid = req.params['userid'];
+                    return await api.getUserInfo(userid);
+                  }),
+              middleware: [
+                RoleMiddleware.get('ADM'),
+              ]),
+          summary: 'Get user info',
+          operationId: 'User_v1.getUserInfo',
+          output: UserInfoDto,
+          tags: tags)
+    ];
+  }
+}

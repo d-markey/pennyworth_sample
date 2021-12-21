@@ -1,0 +1,25 @@
+name: pennyworth_sample
+publish_to: none
+description: Sample for Alfredoc/Pennyworth
+version: 1.0.0
+
+environment:
+  sdk: ">=2.15.0 <3.0.0"
+
+dependencies:
+  alfred: ^0.1.5
+  pennyworth:
+    # path: ../pennyworth
+    git:
+      url: git://github.com/d-markey/pennyworth.git
+
+dev_dependencies:
+  lints: ^1.0.0
+  build: ^2.1.1
+  build_runner: ^2.1.5
+  source_gen: ^1.1.1
+  analyzer: ^2.7.0
+  pennyworth_builder:
+    # path: ../pennyworth_builder
+    git:
+      url: git://github.com/d-markey/pennyworth_builder.git
