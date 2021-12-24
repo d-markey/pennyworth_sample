@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:alfred/alfred.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 import 'package:pennyworth/pennyworth.dart';
 
@@ -57,14 +58,22 @@ class User_v1 extends NestedOpenedApi {
 }
 
 @RestEntity(title: 'User login')
+@JsonSerializable()
 class UserLoginDto {
   UserLoginDto({required this.userId, required this.password});
 
   final String userId;
   final String password;
+
+  // Pennyworth serialization
+  // Map toJson() => autoSerialize();
+
+  // json_serialization serialization
+  Map toJson() => _$UserLoginDtoToJson(this);
 }
 
 @RestEntity(title: 'User info')
+@JsonSerializable()
 class UserInfoDto {
   UserInfoDto(this.userId, this.name, this.roles) : error = null;
 
@@ -84,5 +93,9 @@ class UserInfoDto {
   final List<String>? roles;
   final RestError? error;
 
-  Map toJson() => autoSerialize();
+  // Pennyworth serialization
+  // Map toJson() => autoSerialize();
+
+  // json_serializer serialization
+  Map toJson() => _$UserInfoDtoToJson(this);
 }

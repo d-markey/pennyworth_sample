@@ -99,6 +99,34 @@ extension UserInfoDtoRequestExt on HttpRequest {
 }
 
 // **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+UserLoginDto _$UserLoginDtoFromJson(Map<String, dynamic> json) => UserLoginDto(
+      userId: json['userId'] as String,
+      password: json['password'] as String,
+    );
+
+Map<String, dynamic> _$UserLoginDtoToJson(UserLoginDto instance) =>
+    <String, dynamic>{
+      'userId': instance.userId,
+      'password': instance.password,
+    };
+
+UserInfoDto _$UserInfoDtoFromJson(Map<String, dynamic> json) => UserInfoDto(
+      json['userId'] as String,
+      json['name'] as String?,
+      (json['roles'] as List<dynamic>?)?.map((e) => e as String).toList(),
+    );
+
+Map<String, dynamic> _$UserInfoDtoToJson(UserInfoDto instance) =>
+    <String, dynamic>{
+      'userId': instance.userId,
+      'name': instance.name,
+      'roles': instance.roles,
+    };
+
+// **************************************************************************
 // RestServiceGenerator
 // **************************************************************************
 
