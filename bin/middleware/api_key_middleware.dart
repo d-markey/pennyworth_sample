@@ -8,7 +8,9 @@ import '../extensions.dart';
 import '../services/api_key_service.dart';
 
 class ApiKeyMiddleware {
-  ApiKeyMiddleware._(this.header);
+  ApiKeyMiddleware._(this.header)
+      : security =
+            ApiKeySpecification('APIKey', 'Api Key security', 'header', header);
 
   static final Map<String, ApiKeyMiddleware> _instances =
       <String, ApiKeyMiddleware>{};
@@ -18,11 +20,12 @@ class ApiKeyMiddleware {
           apiKeyHeader.toLowerCase(), () => ApiKeyMiddleware._(apiKeyHeader))
       ._checkApiKey;
 
-  static ApiKeyMiddleware? find(AlfredMiddleware middleware) => _instances
-      .values
-      .singleOrNullWhere((m) => m._checkApiKey == middleware);
+  static ApiKeyMiddleware? find(AlfredMiddleware middleware) =>
+      _instances.values.singleOrNullWhere((m) => m._checkApiKey == middleware);
 
   final String header;
+  final SecuritySpecification security;
+
   final _apiKeyService = ApiKeyService();
 
   FutureOr _checkApiKey(HttpRequest req, HttpResponse res) async {

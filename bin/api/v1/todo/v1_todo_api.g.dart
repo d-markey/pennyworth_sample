@@ -25,41 +25,39 @@ extension TodoDtoRegistrationExt on OpenApiService {
   }
 }
 
-extension TodoDtoSerializationExt on TodoDto {
-  Map autoSerialize() {
-    final map = <String, dynamic>{};
-    map['id'] = id;
-    map['title'] = title;
-    map['comment'] = comment;
-    map['user'] = user?.toJson();
-    map['error'] = error?.toJson();
-    return map;
-  }
-}
-
-extension TodoDtoDeserializationExt on Map {
-  TodoDto autoDeserializeTodoDto() {
-    return TodoDto(
-        this['id'],
-        this['title'],
-        this['comment'],
-        (this['user'] == null)
-            ? null
-            : (this['user'] as Map).autoDeserializeUserInfoDto());
-  }
-}
-
 extension TodoDtoRequestExt on HttpRequest {
   Future<TodoDto> getTodoDto() async {
     final body = await bodyAsJsonMap;
-    return body.autoDeserializeTodoDto();
+    return TodoDto.fromJson(body);
   }
 
   Future<List<TodoDto>> getListOfTodoDto() async {
     final body = await bodyAsJsonList;
-    return body.map((item) => (item as Map).autoDeserializeTodoDto()).toList();
+    return body
+        .map((item) => TodoDto.fromJson((item as Map<String, dynamic>)))
+        .toList();
   }
 }
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+TodoDto _$TodoDtoFromJson(Map<String, dynamic> json) => TodoDto(
+      json['id'] as int?,
+      json['title'] as String?,
+      json['comment'] as String?,
+      json['user'] == null
+          ? null
+          : UserInfoDto.fromJson(json['user'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$TodoDtoToJson(TodoDto instance) => <String, dynamic>{
+      'id': instance.id,
+      'title': instance.title,
+      'comment': instance.comment,
+      'user': instance.user,
+    };
 
 // **************************************************************************
 // RestServiceGenerator
@@ -89,7 +87,6 @@ extension Todo_v1_MounterExt on NestedRoute {
   List<OpenApiRoute> mount_Todo_v1(Todo_v1 api, OpenApiService openApiService) {
     // ensure types used by these operations are registered
     openApiService.registerTodoDto();
-
     // mount operations on the service's base URI
     final mountPoint = route('/todo', middleware: [
       ApiKeyMiddleware.get('X-API-Key'),

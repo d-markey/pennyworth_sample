@@ -21,6 +21,8 @@ extension NonNullableExt<T> on Iterable<T> {
   T? get firstOrNull => isEmpty ? null : first;
   T? get singleOrNull => isEmpty ? null : single;
 
-  T? firstOrNullWhere(bool Function(T) predicate) => cast<T?>().firstWhere((x) => predicate(x!), orElse: _null);
-  T? singleOrNullWhere(bool Function(T) predicate) => cast<T?>().singleWhere((x) => predicate(x!), orElse: _null);
+  T? firstOrNullWhere(bool Function(T) predicate) =>
+      cast<T?>().firstWhere((x) => predicate(x!), orElse: _null);
+  T? singleOrNullWhere(bool Function(T) predicate) =>
+      cast<T?>().singleWhere((x) => predicate(x!), orElse: _null);
 }

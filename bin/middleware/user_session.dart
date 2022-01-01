@@ -17,8 +17,8 @@ class UserSession {
   static const none = UserSession._('', []);
 
   factory UserSession.load(HttpRequest req) {
-    final cookie = req.cookies
-        .singleOrNullWhere((c) => c.name == sessionCookieName);
+    final cookie =
+        req.cookies.singleOrNullWhere((c) => c.name == sessionCookieName);
     if (cookie == null) {
       return UserSession.none;
     } else {

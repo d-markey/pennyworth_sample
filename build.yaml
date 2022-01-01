@@ -4,7 +4,8 @@ targets:
       pennyworth_builder:rest_builder: 
         generate_for: 
          - bin/**
-        enabled: true 
+        enabled: true
+
 
 builders:
   # name of the builder
@@ -21,3 +22,8 @@ builders:
     build_to: cache
     # Combine the parts from each builder into one part file.
     applies_builders: ["source_gen|combining_builder"]
+    defaults:
+      # pennyworth builder options
+      options:
+        auto_serialization: off
+        auto_type_registration: off

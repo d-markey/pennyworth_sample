@@ -42,7 +42,9 @@ class User_v1 extends NestedOpenedApi {
   }
 
   @RestOperation(uri: '/:userid:alpha', summary: 'Get user info')
-  @RestOperation.middleware([ [RoleMiddleware, 'ADM'] ])
+  @RestOperation.middleware([
+    [RoleMiddleware, 'ADM']
+  ])
   Future<UserInfoDto> getUserInfo(String userId) async {
     final user = await _userService.getInfo(userId);
     if (user == null) {
@@ -65,15 +67,14 @@ class UserLoginDto {
   final String userId;
   final String password;
 
-  // Pennyworth serialization
-  // Map toJson() => autoSerialize();
-
-  // json_serialization serialization
+  // json_serializer serialization
   Map toJson() => _$UserLoginDtoToJson(this);
+
+  static UserLoginDto fromJson(Map<String, dynamic> json) => _$UserLoginDtoFromJson(json);
 }
 
-@RestEntity(title: 'User info')
 @JsonSerializable()
+@RestEntity(title: 'User info')
 class UserInfoDto {
   UserInfoDto(this.userId, this.name, this.roles) : error = null;
 
@@ -93,9 +94,8 @@ class UserInfoDto {
   final List<String>? roles;
   final RestError? error;
 
-  // Pennyworth serialization
-  // Map toJson() => autoSerialize();
-
   // json_serializer serialization
   Map toJson() => _$UserInfoDtoToJson(this);
+
+  static UserInfoDto fromJson(Map<String, dynamic> json) => _$UserInfoDtoFromJson(json);
 }

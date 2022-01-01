@@ -21,31 +21,30 @@ extension RestErrorRegistrationExt on OpenApiService {
   }
 }
 
-extension RestErrorSerializationExt on RestError {
-  Map autoSerialize() {
-    final map = <String, dynamic>{};
-    map['statusCode'] = statusCode;
-    map['message'] = message;
-    return map;
-  }
-}
-
-extension RestErrorDeserializationExt on Map {
-  RestError autoDeserializeRestError() {
-    return RestError(statusCode: this['statusCode'], message: this['message']);
-  }
-}
-
 extension RestErrorRequestExt on HttpRequest {
   Future<RestError> getRestError() async {
     final body = await bodyAsJsonMap;
-    return body.autoDeserializeRestError();
+    return RestError.fromJson(body);
   }
 
   Future<List<RestError>> getListOfRestError() async {
     final body = await bodyAsJsonList;
     return body
-        .map((item) => (item as Map).autoDeserializeRestError())
+        .map((item) => RestError.fromJson((item as Map<String, dynamic>)))
         .toList();
   }
 }
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+RestError _$RestErrorFromJson(Map<String, dynamic> json) => RestError(
+      statusCode: json['statusCode'] as int,
+      message: json['message'] as String,
+    );
+
+Map<String, dynamic> _$RestErrorToJson(RestError instance) => <String, dynamic>{
+      'statusCode': instance.statusCode,
+      'message': instance.message,
+    };

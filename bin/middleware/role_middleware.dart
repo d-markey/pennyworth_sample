@@ -8,7 +8,9 @@ import '../extensions.dart';
 import 'user_session.dart';
 
 class RoleMiddleware {
-  RoleMiddleware._(this.role);
+  RoleMiddleware._(this.role)
+      : security = ApiKeySpecification('Cookie', 'Session cookie', 'cookie',
+            UserSession.sessionCookieName);
 
   static final Map<String, RoleMiddleware> _instances =
       <String, RoleMiddleware>{};
@@ -17,11 +19,12 @@ class RoleMiddleware {
     print('get RoleMiddleWare $role: ${StackTrace.current}');
     return _instances.putIfAbsent(role, () => RoleMiddleware._(role))._hasRole;
   }
-      
-  static RoleMiddleware? find(AlfredMiddleware middleware) => _instances.values
-      .singleOrNullWhere((m) => m._hasRole == middleware);
+
+  static RoleMiddleware? find(AlfredMiddleware middleware) =>
+      _instances.values.singleOrNullWhere((m) => m._hasRole == middleware);
 
   final String role;
+  final SecuritySpecification security;
 
   FutureOr _hasRole(HttpRequest req, HttpResponse res) async {
     req.alfred.logWriter(

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:alfred/alfred.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:pennyworth/pennyworth.dart';
 
 import '../../../middleware/api_key_middleware.dart';
@@ -18,7 +19,9 @@ import '../user/v1_user_api.dart';
 part 'v1_todo_api.g.dart';
 
 @RestService('/todo', tags: ['TODO'])
-@RestService.middleware([ [ApiKeyMiddleware, 'X-API-Key'] ])
+@RestService.middleware([
+  [ApiKeyMiddleware, 'X-API-Key']
+])
 // ignore: camel_case_types
 class Todo_v1 extends NestedOpenedApi {
   Todo_v1();
@@ -28,7 +31,9 @@ class Todo_v1 extends NestedOpenedApi {
   @RestOperation.put
   @RestOperation.post
   @RestOperation(uri: '/', summary: 'Create a to-do item')
-  @RestOperation.middleware([ [RoleMiddleware, 'USR'] ])
+  @RestOperation.middleware([
+    [RoleMiddleware, 'USR']
+  ])
   Future<TodoDto> create(HttpRequest req, TodoDto todoReq) async {
     final owner = await UserRepository.instance.find(req.userSession.userId);
     if (owner == null) {
@@ -47,7 +52,9 @@ class Todo_v1 extends NestedOpenedApi {
 
   @RestOperation.patch
   @RestOperation(uri: '/:id:int', summary: 'Update a to-do item')
-  @RestOperation.middleware([ [RoleMiddleware, 'USR'] ])
+  @RestOperation.middleware([
+    [RoleMiddleware, 'USR']
+  ])
   Future<TodoDto> update(HttpRequest req, TodoDto todoReq, int id) async {
     final owner = await UserRepository.instance.find(req.userSession.userId);
     if (owner == null) {
@@ -66,7 +73,9 @@ class Todo_v1 extends NestedOpenedApi {
   }
 
   @RestOperation(uri: '/:id:int', summary: 'Get a to-do item')
-  @RestOperation.middleware([ [RoleMiddleware, 'USR'] ])
+  @RestOperation.middleware([
+    [RoleMiddleware, 'USR']
+  ])
   Future<TodoDto> get(HttpRequest req, int id) async {
     final owner = await UserRepository.instance.find(req.userSession.userId);
     if (owner == null) {
@@ -83,7 +92,9 @@ class Todo_v1 extends NestedOpenedApi {
   }
 
   @RestOperation(uri: '/my-items', summary: 'Get the user\'s to-do items')
-  @RestOperation.middleware([ [RoleMiddleware, 'USR'] ])
+  @RestOperation.middleware([
+    [RoleMiddleware, 'USR']
+  ])
   Future<List<TodoDto>> myItems(HttpRequest req) async {
     final owner = await UserRepository.instance.find(req.userSession.userId);
     if (owner == null) {
@@ -99,6 +110,7 @@ class Todo_v1 extends NestedOpenedApi {
       parentRoute.mount_Todo_v1(this, openApiService);
 }
 
+@JsonSerializable()
 @RestEntity(title: 'To do item')
 class TodoDto {
   TodoDto(this.id, this.title, this.comment, this.user) : error = null;
@@ -123,5 +135,7 @@ class TodoDto {
   final UserInfoDto? user;
   final RestError? error;
 
-  Map toJson() => autoSerialize();
+  Map toJson() => _$TodoDtoToJson(this);
+
+  static TodoDto fromJson(Map<String, dynamic> json) => _$TodoDtoFromJson(json);
 }

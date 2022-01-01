@@ -20,31 +20,16 @@ extension UserLoginDtoRegistrationExt on OpenApiService {
   }
 }
 
-extension UserLoginDtoSerializationExt on UserLoginDto {
-  Map autoSerialize() {
-    final map = <String, dynamic>{};
-    map['userId'] = userId;
-    map['password'] = password;
-    return map;
-  }
-}
-
-extension UserLoginDtoDeserializationExt on Map {
-  UserLoginDto autoDeserializeUserLoginDto() {
-    return UserLoginDto(userId: this['userId'], password: this['password']);
-  }
-}
-
 extension UserLoginDtoRequestExt on HttpRequest {
   Future<UserLoginDto> getUserLoginDto() async {
     final body = await bodyAsJsonMap;
-    return body.autoDeserializeUserLoginDto();
+    return UserLoginDto.fromJson(body);
   }
 
   Future<List<UserLoginDto>> getListOfUserLoginDto() async {
     final body = await bodyAsJsonList;
     return body
-        .map((item) => (item as Map).autoDeserializeUserLoginDto())
+        .map((item) => UserLoginDto.fromJson((item as Map<String, dynamic>)))
         .toList();
   }
 }
@@ -67,33 +52,16 @@ extension UserInfoDtoRegistrationExt on OpenApiService {
   }
 }
 
-extension UserInfoDtoSerializationExt on UserInfoDto {
-  Map autoSerialize() {
-    final map = <String, dynamic>{};
-    map['userId'] = userId;
-    map['name'] = name;
-    map['roles'] = roles;
-    map['error'] = error?.toJson();
-    return map;
-  }
-}
-
-extension UserInfoDtoDeserializationExt on Map {
-  UserInfoDto autoDeserializeUserInfoDto() {
-    return UserInfoDto(this['userId'], this['name'], this['roles']);
-  }
-}
-
 extension UserInfoDtoRequestExt on HttpRequest {
   Future<UserInfoDto> getUserInfoDto() async {
     final body = await bodyAsJsonMap;
-    return body.autoDeserializeUserInfoDto();
+    return UserInfoDto.fromJson(body);
   }
 
   Future<List<UserInfoDto>> getListOfUserInfoDto() async {
     final body = await bodyAsJsonList;
     return body
-        .map((item) => (item as Map).autoDeserializeUserInfoDto())
+        .map((item) => UserInfoDto.fromJson((item as Map<String, dynamic>)))
         .toList();
   }
 }
@@ -155,7 +123,6 @@ extension User_v1_MounterExt on NestedRoute {
     // ensure types used by these operations are registered
     openApiService.registerUserLoginDto();
     openApiService.registerUserInfoDto();
-
     // mount operations on the service's base URI
     final mountPoint = route('/user', middleware: const <AlfredMiddleware>[]);
     final tags = ['USER'];
