@@ -55,8 +55,11 @@ class User_v1 extends NestedOpenedApi {
 
   @override
   List<OpenApiRoute> mount(
-          NestedRoute parentRoute, OpenApiService openApiService) =>
-      parentRoute.mount_User_v1(this, openApiService);
+          NestedRoute parentRoute, OpenApiService openApiService) {
+    openApiService.registerUserInfoDto();
+    openApiService.registerUserLoginDto();
+    return parentRoute.mount_User_v1(this, openApiService);
+  }
 }
 
 @RestEntity(title: 'User login')

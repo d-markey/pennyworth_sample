@@ -106,8 +106,10 @@ class Todo_v1 extends NestedOpenedApi {
 
   @override
   List<OpenApiRoute> mount(
-          NestedRoute parentRoute, OpenApiService openApiService) =>
-      parentRoute.mount_Todo_v1(this, openApiService);
+          NestedRoute parentRoute, OpenApiService openApiService) {
+    openApiService.registerTodoDto();
+    return parentRoute.mount_Todo_v1(this, openApiService);
+  }
 }
 
 @JsonSerializable()

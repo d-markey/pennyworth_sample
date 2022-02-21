@@ -5,6 +5,7 @@ import 'package:pennyworth/pennyworth.dart';
 import 'package:pennyworth/open_api_v3.dart' as v3;
 import 'package:pennyworth/open_api_v2.dart' as v2;
 
+import 'api/math/math_api.dart';
 import 'api/rest_error.dart';
 import 'middleware/middleware_resolver.dart';
 import 'api/v1/v1.dart';
@@ -20,8 +21,12 @@ void startServer() async {
 
   final openApiService = setupOpenApiDocumentation_v3(app);
 
+  // register cross-cutting DTOs here
+  openApiService.registerRestError();
+
   var apis = [
-    Api_v1(app.route('/api')),
+    MathApi(app.route('/math')),
+    Api_v1(app.route('/api/v1')),
     SwaggerApi(app.route('/dev/open-api'), openApiService,
         Directory('assets/swagger-ui-4.1.2/')),
   ];

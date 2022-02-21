@@ -16,7 +16,6 @@ class RoleMiddleware {
       <String, RoleMiddleware>{};
 
   static AlfredMiddleware get(String role) {
-    print('get RoleMiddleWare $role: ${StackTrace.current}');
     return _instances.putIfAbsent(role, () => RoleMiddleware._(role))._hasRole;
   }
 

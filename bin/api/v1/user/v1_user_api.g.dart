@@ -120,9 +120,6 @@ extension User_v1_MounterExt on NestedRoute {
 
   // ignore: non_constant_identifier_names
   List<OpenApiRoute> mount_User_v1(User_v1 api, OpenApiService openApiService) {
-    // ensure types used by these operations are registered
-    openApiService.registerUserLoginDto();
-    openApiService.registerUserInfoDto();
     // mount operations on the service's base URI
     final mountPoint = route('/user', middleware: const <AlfredMiddleware>[]);
     final tags = ['USER'];

@@ -85,8 +85,6 @@ extension Todo_v1_MounterExt on NestedRoute {
 
   // ignore: non_constant_identifier_names
   List<OpenApiRoute> mount_Todo_v1(Todo_v1 api, OpenApiService openApiService) {
-    // ensure types used by these operations are registered
-    openApiService.registerTodoDto();
     // mount operations on the service's base URI
     final mountPoint = route('/todo', middleware: [
       ApiKeyMiddleware.get('X-API-Key'),
