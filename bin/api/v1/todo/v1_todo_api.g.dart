@@ -25,6 +25,28 @@ extension TodoDtoRegistrationExt on OpenApiService {
   }
 }
 
+extension TodoDtoSerializationExt on TodoDto {
+  Map<String, dynamic> autoSerialize() => <String, dynamic>{
+        if (id != null) 'id': id,
+        if (title != null) 'title': title,
+        if (comment != null) 'comment': comment,
+        if (user != null) 'user': user?.toJson(),
+        if (error != null) 'error': error?.toJson(),
+      };
+}
+
+extension TodoDtoDeserializationExt on Map<String, dynamic> {
+  TodoDto autoDeserializeTodoDto() {
+    return TodoDto(
+        this['id'],
+        this['title'],
+        this['comment'],
+        (this['user'] == null)
+            ? null
+            : UserInfoDto.fromJson((this['user'] as Map<String, dynamic>)));
+  }
+}
+
 extension TodoDtoRequestExt on HttpRequest {
   Future<TodoDto> getTodoDto() async {
     final body = await bodyAsJsonMap;

@@ -83,7 +83,7 @@ extension MathService_MounterExt on NestedRoute {
           ),
           summary: 'Returns a / b',
           operationId: 'MathService.div',
-          output: int,
+          output: double,
           tags: tags),
       OpenApiRoute(
           mountPoint.get(

@@ -16,7 +16,7 @@ part 'v1_user_api.g.dart';
 
 @RestService('/user', tags: ['USER'])
 // ignore: camel_case_types
-class User_v1 extends NestedOpenedApi {
+class User_v1 extends NestedOpenApi {
   User_v1();
 
   final _userService = UserService();
@@ -55,7 +55,7 @@ class User_v1 extends NestedOpenedApi {
 
   @override
   List<OpenApiRoute> mount(
-          NestedRoute parentRoute, OpenApiService openApiService) {
+      NestedRoute parentRoute, OpenApiService openApiService) {
     openApiService.registerUserInfoDto();
     openApiService.registerUserLoginDto();
     return parentRoute.mount_User_v1(this, openApiService);
@@ -73,7 +73,8 @@ class UserLoginDto {
   // json_serializer serialization
   Map toJson() => _$UserLoginDtoToJson(this);
 
-  static UserLoginDto fromJson(Map<String, dynamic> json) => _$UserLoginDtoFromJson(json);
+  static UserLoginDto fromJson(Map<String, dynamic> json) =>
+      _$UserLoginDtoFromJson(json);
 }
 
 @JsonSerializable()
@@ -100,5 +101,6 @@ class UserInfoDto {
   // json_serializer serialization
   Map toJson() => _$UserInfoDtoToJson(this);
 
-  static UserInfoDto fromJson(Map<String, dynamic> json) => _$UserInfoDtoFromJson(json);
+  static UserInfoDto fromJson(Map<String, dynamic> json) =>
+      _$UserInfoDtoFromJson(json);
 }

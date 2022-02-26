@@ -14,5 +14,6 @@ class RestError {
 
   Map toJson() => _$RestErrorToJson(this);
 
-  static RestError fromJson(Map<String, dynamic> json) => _$RestErrorFromJson(json);
+  static RestError fromJson(Map<String, dynamic> json) =>
+      _$RestErrorFromJson(json);
 }

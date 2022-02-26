@@ -25,5 +25,5 @@ builders:
     defaults:
       # pennyworth builder options
       options:
-        auto_serialization: off
+        auto_serialization: on
         auto_type_registration: off

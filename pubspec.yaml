@@ -8,7 +8,7 @@ environment:
 
 dependencies:
   alfred: ^0.1.5
-  json_annotation: 4.4.0
+  json_annotation: ^4.4.0
   pennyworth:
     # path: ../pennyworth
     git:

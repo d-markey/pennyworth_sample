@@ -20,6 +20,19 @@ extension UserLoginDtoRegistrationExt on OpenApiService {
   }
 }
 
+extension UserLoginDtoSerializationExt on UserLoginDto {
+  Map<String, dynamic> autoSerialize() => <String, dynamic>{
+        'userId': userId,
+        'password': password,
+      };
+}
+
+extension UserLoginDtoDeserializationExt on Map<String, dynamic> {
+  UserLoginDto autoDeserializeUserLoginDto() {
+    return UserLoginDto(userId: this['userId'], password: this['password']);
+  }
+}
+
 extension UserLoginDtoRequestExt on HttpRequest {
   Future<UserLoginDto> getUserLoginDto() async {
     final body = await bodyAsJsonMap;
@@ -49,6 +62,21 @@ extension UserInfoDtoRegistrationExt on OpenApiService {
     registerTypeSpecification<List<UserInfoDto>>(TypeSpecification.array(
         items: TypeSpecification.object(type: UserInfoDto),
         title: 'User info (array)'));
+  }
+}
+
+extension UserInfoDtoSerializationExt on UserInfoDto {
+  Map<String, dynamic> autoSerialize() => <String, dynamic>{
+        'userId': userId,
+        if (name != null) 'name': name,
+        if (roles != null) 'roles': roles,
+        if (error != null) 'error': error?.toJson(),
+      };
+}
+
+extension UserInfoDtoDeserializationExt on Map<String, dynamic> {
+  UserInfoDto autoDeserializeUserInfoDto() {
+    return UserInfoDto(this['userId'], this['name'], this['roles']);
   }
 }
 

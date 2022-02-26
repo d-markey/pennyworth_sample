@@ -23,7 +23,7 @@ part 'v1_todo_api.g.dart';
   [ApiKeyMiddleware, 'X-API-Key']
 ])
 // ignore: camel_case_types
-class Todo_v1 extends NestedOpenedApi {
+class Todo_v1 extends NestedOpenApi {
   Todo_v1();
 
   final _todoService = TodoService();
@@ -106,7 +106,7 @@ class Todo_v1 extends NestedOpenedApi {
 
   @override
   List<OpenApiRoute> mount(
-          NestedRoute parentRoute, OpenApiService openApiService) {
+      NestedRoute parentRoute, OpenApiService openApiService) {
     openApiService.registerTodoDto();
     return parentRoute.mount_Todo_v1(this, openApiService);
   }
